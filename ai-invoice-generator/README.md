@@ -34,7 +34,12 @@ That's the difference between a screenshot and a document you can send.
 ## Prerequisites
 
 - Node.js 18+ (uses the built-in `fetch`)
-- An [Anthropic API key](https://console.anthropic.com/)
+- An [Anthropic API key](https://console.anthropic.com/) — this is a
+  pay-as-you-go **API** key from the Anthropic Console, billed per token. A
+  Claude Pro/Max or Claude Code **subscription does not include one** and does
+  not cover API usage; they are separate products. The calls in this example
+  are tiny (a fraction of a cent each), and new API accounts usually start with
+  free credit.
 - A [Twill Docs API key](https://www.twilldocs.com/) (starts with `twdc_`)
 
 ## Setup
