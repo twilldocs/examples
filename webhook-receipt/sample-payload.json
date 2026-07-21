@@ -1,0 +1,18 @@
+{
+  "event": "payment.succeeded",
+  "payment": {
+    "id": "pay_9f8c1a2b",
+    "created_at": "2026-07-21T14:32:00Z",
+    "currency": "USD",
+    "method": "card",
+    "customer": {
+      "name": "Acme Corp",
+      "email": "ap@acme.example",
+      "address": "500 Market St, San Francisco, CA"
+    },
+    "line_items": [
+      { "description": "Pro plan — monthly", "quantity": 1, "unit_amount": 4200 },
+      { "description": "Additional seats", "quantity": 3, "unit_amount": 900 }
+    ]
+  }
+}

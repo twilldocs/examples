@@ -1,0 +1,21 @@
+{
+  "name": "twilldocs-webhook-receipt",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Turn a generic payment webhook into a receipt PDF with Twill Docs — no LLM, just structured data in, a real document out.",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^17.0.0",
+    "express": "^4.19.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.0",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
