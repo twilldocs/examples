@@ -1,0 +1,24 @@
+{
+  "template": "invoice",
+  "input": {
+    "invoice_number": "INV-1001",
+    "issue_date": "2026-07-21",
+    "due_date": "2026-08-20",
+    "currency": "USD",
+    "seller": {
+      "name": "Northwind Studio",
+      "address": "500 Market St, San Francisco, CA",
+      "tax_id": "US123456789"
+    },
+    "buyer": {
+      "name": "Acme Corp",
+      "address": "1 Infinite Loop, Cupertino, CA"
+    },
+    "line_items": [
+      { "description": "Consulting — implementation", "quantity": 3, "unit_price": 1200 },
+      { "description": "Travel expenses", "quantity": 1, "unit_price": 340 }
+    ],
+    "tax_rate": 0.085,
+    "notes": "Payment due within 30 days."
+  }
+}
