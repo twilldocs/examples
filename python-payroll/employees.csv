@@ -1,0 +1,5 @@
+employee_name,employee_id,position,base_pay,bonus,tax,pension
+Ada Lovelace,E-1001,Senior Engineer,7200,800,1450,360
+Alan Turing,E-1002,Research Lead,7800,0,1620,390
+Grace Hopper,E-1003,Principal Engineer,8100,1000,1720,405
+Katherine Johnson,E-1004,Staff Analyst,6400,300,1220,320
