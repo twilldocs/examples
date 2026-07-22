@@ -7,6 +7,8 @@
  * the mapping below is the only thing Twill cares about.
  */
 
+import type { ReceiptInput } from "@twilldocs/sdk";
+
 /** The generic incoming webhook body this example understands. */
 export interface PaymentEvent {
   /** e.g. "payment.succeeded" — we only act on successful payments. */
@@ -37,18 +39,6 @@ export interface PaymentEvent {
       unit_amount: number;
     }>;
   };
-}
-
-/** The `receipt` template input, matching Twill's server-side schema exactly. */
-export interface ReceiptInput {
-  receipt_number: string;
-  issue_date: string;
-  currency: string;
-  payment_method?: string;
-  seller: { name: string; address: string; email?: string; tax_id?: string };
-  buyer: { name: string; address: string; email?: string };
-  line_items: Array<{ description: string; quantity: number; unit_price: number }>;
-  notes?: string;
 }
 
 /**

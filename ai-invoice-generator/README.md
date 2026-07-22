@@ -71,31 +71,25 @@ You'll see the structured data Claude extracted, then a finished PDF written to
 
 | Step | File | What happens |
 | ---- | ---- | ------------ |
-| 1. Extract | [`src/generateInvoice.ts`](src/generateInvoice.ts) | Claude is called with a forced **tool** whose input schema is the invoice shape, so it returns typed JSON — never prose to parse. |
-| 2. Schema | [`src/invoiceSchema.ts`](src/invoiceSchema.ts) | One definition shared by the Claude tool and the Twill request. Note there are no `total`/`subtotal` fields — by design. |
-| 3. Render | [`src/twill.ts`](src/twill.ts) | `POST /v1/documents` → poll `GET /v1/documents/{id}` until `succeeded` → `GET …/download`. |
-| 4. Orchestrate | [`src/index.ts`](src/index.ts) | Wires the three steps together into one command. |
+| 1. Extract | [`src/generateInvoice.ts`](src/generateInvoice.ts) | Claude is called with a forced **tool** whose input schema is the invoice shape, so it returns typed JSON — never prose to parse. Typed against the SDK's `InvoiceInput`. |
+| 2. Schema | [`src/invoiceSchema.ts`](src/invoiceSchema.ts) | The JSON Schema for the Claude tool. Note there are no `total`/`subtotal` fields — by design. |
+| 3. Render | [`src/index.ts`](src/index.ts) | Uses the official [`@twilldocs/sdk`](https://github.com/twilldocs/twilldocs-node): `twill.documents.generate("invoice", data)` creates the document and waits for the render, then `download(id)` returns the PDF. |
 
-### The Twill API in three calls
+### Rendering with the SDK
 
-```http
-POST /v1/documents
-Authorization: Bearer twdc_...
-Idempotency-Key: <unique>
-Content-Type: application/json
+The structured invoice goes straight to the SDK — no manual create/poll/download:
 
-{ "template": "invoice", "input": { ...structured invoice... } }
-→ 202 { "id": 123, "status": "pending" }
+```ts
+import { TwillDocs } from "@twilldocs/sdk";
+
+const twill = new TwillDocs({ apiKey: process.env.TWILL_API_KEY! });
+const doc = await twill.documents.generate("invoice", invoice); // create + wait
+const pdf = await twill.documents.download(doc.id);
 ```
 
-```http
-GET /v1/documents/123        → { "id": 123, "status": "succeeded" }
-GET /v1/documents/123/download → the PDF bytes
-```
-
-Rendering is asynchronous and idempotent: the `Idempotency-Key` header makes a
-retried request return the original document instead of billing a second
-render.
+`generate` is idempotent (the SDK sends an idempotency key automatically) and
+returns once Twill has finished rendering. Twill computes every monetary total
+server-side.
 
 ## Adapting this to your app
 

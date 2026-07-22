@@ -70,7 +70,7 @@ curl -L http://localhost:3000/receipts/123 -o receipt.pdf
 | ---- | ---- |
 | [`src/server.ts`](src/server.ts) | Express server: the `/webhooks/payment` endpoint and a `/receipts/:id` status/download route. |
 | [`src/mapPaymentToReceipt.ts`](src/mapPaymentToReceipt.ts) | Maps the generic payment payload to Twill's `receipt` input. **The only part you'd customize per processor.** |
-| [`src/twill.ts`](src/twill.ts) | Twill client: `POST /v1/documents` → poll `GET /v1/documents/{id}` → download. |
+| [`@twilldocs/sdk`](https://github.com/twilldocs/twilldocs-node) | The official SDK — `twill.documents.create/retrieve/download`. No hand-rolled HTTP client. |
 | [`src/verifySignature.ts`](src/verifySignature.ts) | Optional HMAC-SHA256 signature check for incoming webhooks. |
 
 ### Three things this example gets right (and you should too)

@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { TwillDocs } from "@twilldocs/sdk";
 import { generateInvoice } from "./generateInvoice.js";
-import { createInvoiceDocument, waitForDocument, downloadPdf } from "./twill.js";
 
 const DEFAULT_REQUEST =
   "Bill Acme Corp (500 Market St, San Francisco) for 3 days of consulting at " +
@@ -19,21 +19,22 @@ async function main() {
   const invoice = await generateInvoice(request);
   console.log(JSON.stringify(invoice, null, 2) + "\n");
 
-  // 2. Hand the structured data to Twill. Twill validates it, does the money
-  //    math, and renders a real, paginated PDF via headless Chrome.
+  // 2. Hand the structured data to Twill via the official SDK. `generate`
+  //    creates the document, waits for the render, and Twill does the money
+  //    math — one call instead of create + poll + download plumbing.
   console.log("📤 Sending to Twill Docs…");
-  const created = await createInvoiceDocument(invoice);
-  console.log(`   Document #${created.id} queued (status: ${created.status})`);
-
-  console.log("⏳ Waiting for the render to finish…");
-  await waitForDocument(created.id);
-  console.log("   Render succeeded ✅");
+  const twill = new TwillDocs({
+    apiKey: process.env.TWILL_API_KEY!,
+    baseUrl: process.env.TWILL_BASE_URL,
+  });
+  const doc = await twill.documents.generate("invoice", invoice);
+  console.log(`   Document #${doc.id} rendered ✅`);
 
   // 3. Download the finished PDF.
-  const pdf = await downloadPdf(created.id);
+  const pdf = await twill.documents.download(doc.id);
   const outDir = join(process.cwd(), "out");
   await mkdir(outDir, { recursive: true });
-  const outPath = join(outDir, `invoice-${created.id}.pdf`);
+  const outPath = join(outDir, `invoice-${doc.id}.pdf`);
   await writeFile(outPath, pdf);
 
   console.log(`\n🎉 Done — invoice saved to ${outPath} (${(pdf.length / 1024).toFixed(1)} KB)`);

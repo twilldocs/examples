@@ -1,52 +1,17 @@
 /**
- * The invoice `input` shape, defined once.
+ * The JSON Schema handed to Claude as a tool input schema.
  *
- * This mirrors Twill Docs' server-side `invoice` template schema exactly, so
- * whatever Claude produces here is accepted by `POST /v1/documents` without a
- * translation layer.
+ * It mirrors Twill Docs' `invoice` template — the same shape as the SDK's
+ * `InvoiceInput` type (imported from `@twilldocs/sdk` where the data is used).
+ * Forcing Claude to "call" this tool guarantees it returns data in exactly this
+ * shape rather than free-form prose we'd have to parse.
  *
  * The important thing to notice: there are NO `subtotal`, `tax`, or `total`
  * fields. The model is deliberately never asked to do arithmetic — it only
  * identifies the parties, the line items, and the tax *rate*. Twill computes
- * every monetary total server-side from the line items. That's the difference
- * between "an LLM that writes a PDF" (which quietly gets the math wrong) and a
- * document you can actually send to a customer.
- */
-
-export interface InvoiceParty {
-  name: string;
-  address: string;
-  email?: string;
-  /** Seller only — VAT / tax registration number. */
-  tax_id?: string;
-}
-
-export interface InvoiceLineItem {
-  description: string;
-  quantity: number;
-  unit_price: number;
-}
-
-export interface InvoiceInput {
-  invoice_number: string;
-  /** ISO 8601 date, e.g. "2026-07-21". */
-  issue_date: string;
-  /** ISO 8601 date, on or after issue_date. */
-  due_date: string;
-  /** 3-letter ISO 4217 code, e.g. "USD". */
-  currency: string;
-  seller: InvoiceParty;
-  buyer: InvoiceParty;
-  line_items: InvoiceLineItem[];
-  /** Fraction between 0 and 1, e.g. 0.2 for 20%. Omit if no tax. */
-  tax_rate?: number;
-  notes?: string;
-}
-
-/**
- * JSON Schema handed to Claude as a tool input schema. Forcing the model to
- * "call" this tool guarantees it returns data in exactly this shape rather than
- * free-form prose we'd have to parse.
+ * every monetary total server-side. That's the difference between "an LLM that
+ * writes a PDF" (which quietly gets the math wrong) and a document you can
+ * actually send to a customer.
  */
 export const invoiceToolSchema = {
   type: "object",

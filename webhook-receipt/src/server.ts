@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { type Request } from "express";
+import { TwillDocs } from "@twilldocs/sdk";
 import { mapPaymentToReceipt, type Merchant, type PaymentEvent } from "./mapPaymentToReceipt.js";
-import { createDocument, getDocument, downloadPdf } from "./twill.js";
 import { isValidSignature } from "./verifySignature.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
@@ -13,6 +13,11 @@ const merchant: Merchant = {
   email: process.env.MERCHANT_EMAIL || undefined,
   tax_id: process.env.MERCHANT_TAX_ID || undefined,
 };
+
+const twill = new TwillDocs({
+  apiKey: process.env.TWILL_API_KEY!,
+  baseUrl: process.env.TWILL_BASE_URL,
+});
 
 const app = express();
 
@@ -62,7 +67,9 @@ app.post("/webhooks/payment", async (req: Request & { rawBody?: Buffer }, res) =
     //    is our idempotency key: a redelivered webhook reuses the same receipt
     //    instead of generating a duplicate.
     const input = mapPaymentToReceipt(body, merchant);
-    const doc = await createDocument("receipt", input, `payment:${body.payment.id}`);
+    const doc = await twill.documents.create("receipt", input, {
+      idempotencyKey: `payment:${body.payment.id}`,
+    });
 
     console.log(`✅ payment ${body.payment.id} → receipt document #${doc.id} (${doc.status})`);
     return res.status(202).json({
@@ -87,14 +94,14 @@ app.get("/receipts/:id", async (req, res) => {
   if (!Number.isInteger(id)) return res.status(400).json({ error: "invalid id" });
 
   try {
-    const doc = await getDocument(id);
+    const doc = await twill.documents.retrieve(id);
     if (doc.status !== "succeeded") {
       return res.status(200).json({ id, status: doc.status, error: doc.error ?? null });
     }
-    const pdf = await downloadPdf(id);
+    const pdf = await twill.documents.download(id);
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `inline; filename="receipt-${id}.pdf"`);
-    return res.send(pdf);
+    return res.send(Buffer.from(pdf));
   } catch (err) {
     return res.status(502).json({ error: err instanceof Error ? err.message : String(err) });
   }

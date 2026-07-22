@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { invoiceToolSchema, type InvoiceInput } from "./invoiceSchema.js";
+import type { InvoiceInput } from "@twilldocs/sdk";
+import { invoiceToolSchema } from "./invoiceSchema.js";
 
 const anthropic = new Anthropic(); // reads ANTHROPIC_API_KEY from the environment
 
