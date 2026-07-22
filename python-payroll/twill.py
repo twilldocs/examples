@@ -10,7 +10,7 @@ import urllib.request
 import uuid
 from typing import Any
 
-DEFAULT_BASE_URL = os.environ.get("TWILL_BASE_URL", "https://www.twilldocs.com").rstrip("/")
+DEFAULT_BASE_URL = os.environ.get("TWILL_BASE_URL", "https://api.twilldocs.com").rstrip("/")
 
 
 class TwillError(RuntimeError):

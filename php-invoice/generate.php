@@ -33,7 +33,7 @@ if ($apiKey === '') {
     fwrite(STDERR, "TWILL_API_KEY is not set. Copy .env.example to .env and fill it in.\n");
     exit(1);
 }
-$baseUrl = getenv('TWILL_BASE_URL') ?: 'https://www.twilldocs.com';
+$baseUrl = getenv('TWILL_BASE_URL') ?: 'https://api.twilldocs.com';
 
 $client = new TwillClient($apiKey, $baseUrl);
 

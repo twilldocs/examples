@@ -18,7 +18,7 @@ Set your key and base URL first:
 
 ```bash
 export TWILL_API_KEY=twdc_...
-export TWILL_BASE_URL=https://www.twilldocs.com
+export TWILL_BASE_URL=https://api.twilldocs.com
 ```
 
 ### 1. Create a document

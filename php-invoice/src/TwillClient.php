@@ -19,7 +19,7 @@ final class TwillClient
 
     public function __construct(
         private string $apiKey,
-        string $baseUrl = 'https://www.twilldocs.com',
+        string $baseUrl = 'https://api.twilldocs.com',
     ) {
         $this->baseUrl = rtrim($baseUrl, '/');
     }

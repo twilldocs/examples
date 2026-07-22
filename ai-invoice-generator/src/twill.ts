@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { InvoiceInput } from "./invoiceSchema.js";
 
-const BASE_URL = (process.env.TWILL_BASE_URL ?? "https://www.twilldocs.com").replace(/\/$/, "");
+const BASE_URL = (process.env.TWILL_BASE_URL ?? "https://api.twilldocs.com").replace(/\/$/, "");
 const API_KEY = process.env.TWILL_API_KEY;
 
 type DocumentStatus = "pending" | "processing" | "succeeded" | "failed";

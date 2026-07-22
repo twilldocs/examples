@@ -17,7 +17,7 @@ if [ -z "${TWILL_API_KEY:-}" ]; then
   echo "TWILL_API_KEY is not set. Copy .env.example to .env and fill it in." >&2
   exit 1
 fi
-BASE_URL="${TWILL_BASE_URL:-https://www.twilldocs.com}"
+BASE_URL="${TWILL_BASE_URL:-https://api.twilldocs.com}"
 AUTH="Authorization: Bearer ${TWILL_API_KEY}"
 
 # Tiny JSON field extractors — fine for these small, known responses. In real
