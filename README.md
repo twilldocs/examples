@@ -10,6 +10,7 @@ project you can clone, configure, and run.
 | ------- | ------------- | ----- |
 | [ai-invoice-generator](./ai-invoice-generator) | Turn a plain-English billing request into a production-ready invoice PDF — Claude extracts the structured data, Twill validates it, does the money math, and renders the document. | TypeScript / Node |
 | [webhook-receipt](./webhook-receipt) | Turn a payment webhook into a receipt PDF — structured data in, a real document out. Processor-agnostic, no LLM, one API key. | TypeScript / Node |
+| [php-invoice](./php-invoice) | Generate an invoice PDF from structured data in vanilla PHP — no framework, no dependencies, one API key. | PHP |
 
 _More examples coming — quotes, payslips, and legal documents._
 

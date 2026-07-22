@@ -1,0 +1,16 @@
+{
+    "name": "twilldocs/php-invoice-example",
+    "description": "Generate an invoice PDF from structured data with Twill Docs — dependency-free vanilla PHP.",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "TwillDocs\\Example\\": "src/"
+        }
+    }
+}
